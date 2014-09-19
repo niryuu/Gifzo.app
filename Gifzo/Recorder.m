@@ -10,12 +10,18 @@
 
 @implementation Recorder {
     AVCaptureSession *_captureSession;
-    AVCaptureMovieFileOutput *_movieFileOutput;
+    AVCaptureStillImageOutput *_stillImageOutput;
     NSTimer *_timer;
+    CGImageDestinationRef _dest;
+    NSString *_path;
+    NSMutableArray *_stillImageArray;
 }
 
 - (void)startRecordingWithOutputURL:(NSURL *)outputFileURL croppingRect:(NSRect)rect screen:(NSScreen *)screen
 {
+    _stillImageArray = [NSMutableArray array];
+    NSString *home = NSHomeDirectory();
+    _path = [home stringByAppendingString:@"/Desktop/animated.gif"];
     _captureSession = [[AVCaptureSession alloc] init];
 
     _captureSession.sessionPreset = AVCaptureSessionPresetHigh;
@@ -32,10 +38,10 @@
         [_captureSession addInput:input];
     }
 
-    _movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
+    _stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
 
-    if ([_captureSession canAddOutput:_movieFileOutput]) {
-        [_captureSession addOutput:_movieFileOutput];
+    if ([_captureSession canAddOutput:_stillImageOutput]) {
+        [_captureSession addOutput:_stillImageOutput];
     }
 
     [_captureSession startRunning];
@@ -47,37 +53,42 @@
         }
     }
 
-    [_movieFileOutput startRecordingToOutputFileURL:outputFileURL recordingDelegate:self];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:0.2f target:self selector:@selector(captureStillImage:) userInfo:nil repeats:YES];
+    
 }
 
-- (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error
+- (void)captureStillImage:(NSTimer *)timer
 {
-    [_captureSession stopRunning];
-    _captureSession = nil;
-
-    if (error) {
-        NSLog(@"Did finish recording to %@ due to error %@", [outputFileURL description], [error description]);
-
-        [NSApp terminate:nil];
-    }
-
-    [self.delegate recorder:self didRecordedWithOutputURL:outputFileURL];
-}
-
-- (void)captureOutput:(AVCaptureFileOutput *)captureOutput willFinishRecordingToOutputFileAtURL:(NSURL *)fileURL fromConnections:(NSArray *)connections error:(NSError *)error
-{
-    if (error) {
-        NSLog(@"%@", [error description]);
-        
-        [NSApp terminate:nil];
-    }
+    AVCaptureConnection *connection = [[_stillImageOutput connections] lastObject];
+    [_stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+        NSData *data = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+        [_stillImageArray addObject:data];
+    }];
 }
 
 - (void)finishRecording
 {
     NSLog(@"finish recording");
-
-    [_movieFileOutput stopRecording];
+    [_timer invalidate];
+    _dest = CGImageDestinationCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:_path], kUTTypeGIF, [_stillImageArray count], nil);
+    NSDictionary *frameProperties = [NSDictionary dictionaryWithObject:
+                                     [NSDictionary dictionaryWithObject:
+                                      [NSNumber numberWithFloat:0.2f] forKey:(NSString *)kCGImagePropertyGIFDelayTime]
+                                                                forKey:(NSString *)kCGImagePropertyGIFDictionary];
+    NSDictionary *gifProperties = [NSDictionary dictionaryWithObject:
+                                   [NSDictionary dictionaryWithObject:
+                                    [NSNumber numberWithInt:0] forKey:(NSString *)kCGImagePropertyGIFLoopCount]
+                                                              forKey:(NSString *)kCGImagePropertyGIFDictionary];
+    
+    for(NSData* data in _stillImageArray) {
+        CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData((__bridge CFDataRef)(data));
+        CGImageRef imageRef = CGImageCreateWithJPEGDataProvider(imgDataProvider, NULL, true, kCGRenderingIntentDefault);
+        CGImageDestinationAddImage(_dest, imageRef, (__bridge CFDictionaryRef)frameProperties);
+    }
+    CGImageDestinationSetProperties(_dest, (__bridge CFDictionaryRef)gifProperties);
+    CGImageDestinationFinalize(_dest);
+    CFRelease(_dest);
+    [self.delegate performSelector:@selector(saveGIF:) withObject:nil];
 }
 
 @end

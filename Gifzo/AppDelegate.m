@@ -79,7 +79,8 @@
         [window close];
     }
 
-    [self convertFromMOVToMP4:outputFileURL];
+    //[self convertFromMOVToMP4:outputFileURL];
+    [self saveGIF: outputFileURL];
 }
 
 - (void)convertFromMOVToMP4:(NSURL *)outputFileURL
@@ -176,5 +177,10 @@
     [defaults registerDefaults:initialValueDict];
     
     return defaults;
+}
+
+- (void)saveGIF:(NSURL*)url {
+    NSLog(NSHomeDirectory());
+    [NSApp terminate:nil];
 }
 @end

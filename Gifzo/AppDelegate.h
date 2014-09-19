@@ -10,8 +10,9 @@
 #import "DrawMouseBoxView.h"
 #import "Recorder.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, DrawMouseBoxViewDelegate, RecorderDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, DrawMouseBoxViewDelegate>
 
 @property Recorder *recorder;
+- (void)saveGIF:(NSURL*)url;
 
 @end

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2DFC146D19CC22E7000981ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DFC146C19CC22E7000981ED /* CoreGraphics.framework */; };
+		2DFC146F19CC22F3000981ED /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DFC146E19CC22F3000981ED /* ImageIO.framework */; };
+		2DFC147119CC3166000981ED /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DFC147019CC3166000981ED /* CoreServices.framework */; };
 		5534651B1743FC9400DBF01C /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5534651A1743FC9400DBF01C /* icon.icns */; };
 		55354AF7173A82F500BEEBA6 /* Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 55354AF6173A82F500BEEBA6 /* Recorder.m */; };
 		55354AFE173A8D2200BEEBA6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55354AFD173A8D2200BEEBA6 /* AVFoundation.framework */; };
@@ -22,6 +25,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2DFC146C19CC22E7000981ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2DFC146E19CC22F3000981ED /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		2DFC147019CC3166000981ED /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		5534651A1743FC9400DBF01C /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../icon.icns; sourceTree = "<group>"; };
 		55354AF5173A82F500BEEBA6 /* Recorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recorder.h; sourceTree = "<group>"; };
 		55354AF6173A82F500BEEBA6 /* Recorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recorder.m; sourceTree = "<group>"; };
@@ -51,6 +57,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DFC147119CC3166000981ED /* CoreServices.framework in Frameworks */,
+				2DFC146F19CC22F3000981ED /* ImageIO.framework in Frameworks */,
+				2DFC146D19CC22E7000981ED /* CoreGraphics.framework in Frameworks */,
 				55354AFE173A8D2200BEEBA6 /* AVFoundation.framework in Frameworks */,
 				55E40D1917321222008F31EC /* Cocoa.framework in Frameworks */,
 				55F348A3174AC8F80086B4AE /* Carbon.framework in Frameworks */,
@@ -80,6 +89,9 @@
 		55E40D1717321222008F31EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2DFC147019CC3166000981ED /* CoreServices.framework */,
+				2DFC146E19CC22F3000981ED /* ImageIO.framework */,
+				2DFC146C19CC22E7000981ED /* CoreGraphics.framework */,
 				55F348A1174AC8D70086B4AE /* Carbon.framework */,
 				55354AFD173A8D2200BEEBA6 /* AVFoundation.framework */,
 				55E40D1817321222008F31EC /* Cocoa.framework */,

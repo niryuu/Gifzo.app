@@ -15,10 +15,10 @@
 - (void)recorder:(Recorder *)recorder didRecordedWithOutputURL:(NSURL *)outputFileURL;
 @end
 
-@interface Recorder : NSObject <AVCaptureFileOutputRecordingDelegate> {
+@interface Recorder : NSObject {
 }
 
-@property(weak) id <RecorderDelegate> delegate;
+@property(weak) id delegate;
 
 - (void)startRecordingWithOutputURL:(NSURL *)outputFileURL croppingRect:(NSRect)rect screen:(NSScreen *)screen;
 - (void)finishRecording;
